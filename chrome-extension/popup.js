@@ -127,6 +127,9 @@ function setupEventListeners() {
   });
 }
 
+// Local timer interval for demo mode
+let localTimerInterval = null;
+
 // Timer Functions
 function toggleTimer() {
   if (state.isRunning) {
@@ -140,12 +143,25 @@ function startTimer() {
   state.isRunning = true;
   state.currentSessionStart = Date.now();
   
-  chrome.runtime.sendMessage({
-    action: 'startTimer',
-    duration: state.timeRemaining,
-    sessionType: state.currentType,
-    pomodorosCompleted: state.pomodorosCompleted
-  });
+  if (isDemo) {
+    // Run timer locally in demo mode
+    localTimerInterval = setInterval(() => {
+      if (state.timeRemaining > 0) {
+        state.timeRemaining--;
+        updateTimerDisplay();
+        updateProgress();
+      } else {
+        handleSessionComplete(state.currentType);
+      }
+    }, 1000);
+  } else {
+    chrome.runtime.sendMessage({
+      action: 'startTimer',
+      duration: state.timeRemaining,
+      sessionType: state.currentType,
+      pomodorosCompleted: state.pomodorosCompleted
+    });
+  }
   
   updateUI();
   saveState();
