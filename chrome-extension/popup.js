@@ -5,6 +5,41 @@ const TIMER_CONFIG = {
   longBreak: { duration: 15 * 60, label: 'Long Break' }
 };
 
+// Demo mode detection (for preview outside Chrome extension)
+const isDemo = typeof chrome === 'undefined' || !chrome.runtime || !chrome.runtime.id;
+
+// Mock Chrome API for demo mode
+if (isDemo) {
+  window.chrome = {
+    storage: {
+      local: {
+        get: (keys, callback) => {
+          const data = {};
+          keys.forEach(key => {
+            const stored = localStorage.getItem(key);
+            if (stored) data[key] = JSON.parse(stored);
+          });
+          callback(data);
+        },
+        set: (data) => {
+          Object.entries(data).forEach(([key, value]) => {
+            localStorage.setItem(key, JSON.stringify(value));
+          });
+        }
+      }
+    },
+    runtime: {
+      sendMessage: (msg, callback) => {
+        if (callback) callback(null);
+        return Promise.resolve();
+      },
+      onMessage: {
+        addListener: () => {}
+      }
+    }
+  };
+}
+
 // State
 let state = {
   currentType: 'work',
