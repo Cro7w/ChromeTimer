@@ -268,7 +268,7 @@ function App() {
           <InstallStep 
             number="3"
             title="Load Extension"
-            description="Click 'Load unpacked' and select the chrome-extension folder"
+            description="Click 'Load unpacked' and select the downloaded chrome-extension folder"
           />
           <InstallStep 
             number="4"
@@ -278,9 +278,16 @@ function App() {
         </div>
 
         <div className="download-box">
-          <h3>Extension Location</h3>
-          <code>/app/chrome-extension</code>
-          <p>The extension files are ready to be loaded into Chrome!</p>
+          <h3>Download Extension</h3>
+          <a href="/chrome-extension.zip" download="study-focus-timer.zip" className="download-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download ZIP File
+          </a>
+          <p>Extract the ZIP and load the folder in Chrome</p>
         </div>
       </section>
 
