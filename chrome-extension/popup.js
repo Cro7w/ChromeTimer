@@ -169,13 +169,26 @@ function startTimer() {
 
 function pauseTimer() {
   state.isRunning = false;
-  chrome.runtime.sendMessage({ action: 'pauseTimer' });
+  
+  if (isDemo && localTimerInterval) {
+    clearInterval(localTimerInterval);
+    localTimerInterval = null;
+  } else {
+    chrome.runtime.sendMessage({ action: 'pauseTimer' });
+  }
+  
   updateUI();
   saveState();
 }
 
 function resetTimer() {
   state.isRunning = false;
+  
+  if (isDemo && localTimerInterval) {
+    clearInterval(localTimerInterval);
+    localTimerInterval = null;
+  }
+  
   state.timeRemaining = TIMER_CONFIG[state.currentType].duration;
   state.currentSessionStart = null;
   
