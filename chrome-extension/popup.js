@@ -192,7 +192,9 @@ function resetTimer() {
   state.timeRemaining = TIMER_CONFIG[state.currentType].duration;
   state.currentSessionStart = null;
   
-  chrome.runtime.sendMessage({ action: 'resetTimer' });
+  if (!isDemo) {
+    chrome.runtime.sendMessage({ action: 'resetTimer' });
+  }
   updateUI();
   saveState();
 }
