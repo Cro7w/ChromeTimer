@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Focus Timer</title>
+  <link rel="stylesheet" href="popup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12,6 12,12 16,14"/>
+        </svg>
+        <span>Study Focus</span>
+      </div>
+      <button id="statsBtn" class="icon-btn" title="View Statistics">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 20V10"/>
+          <path d="M12 20V4"/>
+          <path d="M6 20v-6"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Timer View -->
+    <main id="timerView" class="main-view">
+      <!-- Session Type Tabs -->
+      <div class="session-tabs">
+        <button class="tab-btn active" data-type="work">Focus</button>
+        <button class="tab-btn" data-type="shortBreak">Short Break</button>
+        <button class="tab-btn" data-type="longBreak">Long Break</button>
+      </div>
+
+      <!-- Timer Circle -->
+      <div class="timer-wrapper">
+        <div class="timer-circle">
+          <svg class="timer-svg" viewBox="0 0 200 200">
+            <circle class="timer-bg" cx="100" cy="100" r="90"/>
+            <circle id="timerProgress" class="timer-progress" cx="100" cy="100" r="90"/>
+          </svg>
+          <div class="timer-content">
+            <span id="timerDisplay" class="timer-display">25:00</span>
+            <span id="sessionLabel" class="session-label">Focus Time</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pomodoro Counter -->
+      <div class="pomodoro-counter">
+        <span id="pomodoroCount">0</span> / 4 Pomodoros
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <button id="resetBtn" class="control-btn secondary" title="Reset">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+        </button>
+        <button id="startBtn" class="control-btn primary">
+          <svg id="playIcon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5,3 19,12 5,21"/>
+          </svg>
+          <svg id="pauseIcon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+            <rect x="6" y="4" width="4" height="16"/>
+            <rect x="14" y="4" width="4" height="16"/>
+          </svg>
+        </button>
+        <button id="skipBtn" class="control-btn secondary" title="Skip">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5,4 15,12 5,20"/>
+            <line x1="19" y1="5" x2="19" y2="19"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Today's Progress -->
+      <div class="today-progress">
+        <div class="progress-item">
+          <span class="progress-value" id="todayFocus">0</span>
+          <span class="progress-label">min focused</span>
+        </div>
+        <div class="progress-divider"></div>
+        <div class="progress-item">
+          <span class="progress-value" id="todaySessions">0</span>
+          <span class="progress-label">sessions</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Stats View -->
+    <main id="statsView" class="main-view" style="display:none;">
+      <button id="backBtn" class="back-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5"/>
+          <path d="M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Timer
+      </button>
+
+      <!-- Stats Tabs -->
+      <div class="stats-tabs">
+        <button class="stats-tab active" data-period="today">Today</button>
+        <button class="stats-tab" data-period="week">This Week</button>
+        <button class="stats-tab" data-period="all">All Time</button>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-cards">
+        <div class="stat-card">
+          <div class="stat-icon focus-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12,6 12,12 16,14"/>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="statFocusTime">0</span>
+            <span class="stat-label">Minutes Focused</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon sessions-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22,4 12,14.01 9,11.01"/>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="statSessions">0</span>
+            <span class="stat-label">Sessions Completed</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon streak-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="statStreak">0</span>
+            <span class="stat-label">Day Streak</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Session History -->
+      <div class="history-section">
+        <h3 class="history-title">Recent Sessions</h3>
+        <div id="historyList" class="history-list">
+          <!-- Sessions will be dynamically added here -->
+        </div>
+      </div>
+
+      <!-- Clear History -->
+      <button id="clearHistoryBtn" class="clear-btn">Clear All History</button>
+    </main>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
